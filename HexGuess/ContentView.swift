@@ -37,17 +37,24 @@ struct ContentView: View {
         ZStack{
             Color(hex: hexCode)
                 .ignoresSafeArea()
-            RoundedRectangle(cornerSize: CGSize(width: 15, height: 15))
-                .fill(.white)
-                .frame(width: 250, height: 200)
-                
-            
-            VStack {
-                Image(systemName: "globe")
-                    .imageScale(.large)
-                    .foregroundStyle(.tint)
-                TextField("FFFFFF", text: $hexCode)
-                    .frame(width: 60)
+            VStack{
+                Spacer()
+                ZStack{
+                    RoundedRectangle(cornerSize: CGSize(width: 15, height: 15))
+                        .fill(.white)
+                        .frame(width: 250, height: 200)
+                    
+                    
+                    VStack {
+                        Image(systemName: "globe")
+                            .imageScale(.large)
+                            .foregroundStyle(.tint)
+                        TextField("FFFFFF", text: $hexCode)
+                            .frame(width: 65)
+                    }
+                }
+                Spacer()
+                Keyboard()
             }
         }
     }

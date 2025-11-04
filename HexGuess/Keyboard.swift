@@ -10,68 +10,75 @@ import CoreGraphics
 
 struct Keyboard: View {
     var body: some View {
-        VStack{
-            // a -
+        VStack(spacing: 0){
             HStack{
-                Cell()
-                Cell()
-                Cell()
-                Cell()
-                Cell()
-                Cell()
+                Cell(key: "0")
+                Cell(key: "1")
+                Cell(key: "2")
+                Cell(key: "3")
+                Cell(key: "4")
+                Cell(key: "<-")
             }
+            .frame(width: 360)
             HStack{
-                Cell()
-                Cell()
-                Cell()
-                Cell()
-                Cell()
+                Cell(key: "5")
+                Cell(key: "6")
+                Cell(key: "7")
+                Cell(key: "8")
+                Cell(key: "9")
             }
+            .frame(width: 300)
             HStack{
-                Cell()
-                Cell()
-                Cell()
-                Cell()
-                Cell()
-                Cell()
+                Cell(key: "A")
+                Cell(key: "B")
+                Cell(key: "C")
+                Cell(key: "D")
+                Cell(key: "E")
+                Cell(key: "F")
             }
-//            .padding()
+            .frame(width: 360)
         }
-//        .padding()
-        .frame(width: 360, height: 200)
+        .frame(height: 180)
     }
 }
 
 struct Cell: View {
+    var key: String
     var body: some View {
         GeometryReader { geometry in
-            Path { path in
+            ZStack{
                 let width: CGFloat = min(geometry.size.width, geometry.size.height)
-                let height = width
                 
-                path.move(
-                    to: CGPoint(
-                        x: width * 0.95,
-                        y: height * 0.20
-                    )
-                )
-                HexParams.segments.forEach { segment in
-                    path.addLine(to: CGPoint(
-                        x: width * segment.line.x,
-                        y: height * segment.line.y
-                    ))
+                Path { path in
+                    let width = width
+                    let height = width
                     
-                    path.addQuadCurve(to: CGPoint(
-                        x: width * segment.curve.x,
-                        y: height * segment.curve.y
-                    ), control: CGPoint(
-                        x: width * segment.control.x,
-                        y: height * segment.control.y
-                    ))
+                    path.move(
+                        to: CGPoint(
+                            x: width * 0.95,
+                            y: height * 0.20
+                        )
+                    )
+                    HexParams.segments.forEach { segment in
+                        path.addLine(to: CGPoint(
+                            x: width * segment.line.x,
+                            y: height * segment.line.y
+                        ))
+                        
+                        path.addQuadCurve(to: CGPoint(
+                            x: width * segment.curve.x,
+                            y: height * segment.curve.y
+                        ), control: CGPoint(
+                            x: width * segment.control.x,
+                            y: height * segment.control.y
+                        ))
+                    }
                 }
+                .stroke(.black)
+                .fill(.white)
+                .frame(height: width)
+                Text("\(key)")
             }
-            .stroke(.black)
-//            .background(.green)
         }
     }
 }
