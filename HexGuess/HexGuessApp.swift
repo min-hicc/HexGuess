@@ -11,7 +11,7 @@ import SwiftUI
 struct HexGuessApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Play()
         }
     }
 }
