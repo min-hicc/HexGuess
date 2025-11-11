@@ -38,26 +38,21 @@ struct Play: View {
             }
         }
         if isPlaying {
-            ContentView(hexToGuess: randomColor)
+            ZStack{
+                ContentView(hexToGuess: randomColor)
+
+                Button(action: {isPlaying.toggle()}) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(.white)
+                        Text("back")
+                    }
+                }
+                .frame(width: 70, height: 20)
+                .position(x: 50, y: 10)
+            }
         }
 //        if isPlaying {
-//            ContentView()
-//
-//            GeometryReader { geometry in
-//                ZStack{
-//                    Button(action: {isPlaying.toggle()}) {
-//                        ZStack {
-//                            RoundedRectangle(cornerRadius: 10)
-//                                .fill(.white)
-//                                .frame(width: 70, height: 30)
-//                            Text("back")
-////                                .color(Color.brown)
-//                        }
-//                    }
-////                    .position(x: (geometry.size.width - 70), y: 20)
-//                }
-//            }
-//        }
     }
 }
 

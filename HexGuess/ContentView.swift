@@ -31,7 +31,6 @@ extension Color {
     }
 }
 
-
 struct ContentView: View {
     let hexToGuess: String
     @State private var hexCode: String = ""
@@ -47,6 +46,8 @@ struct ContentView: View {
     @State private var lastGuessStr1: String = ""
     @State private var lastGuessStr2: String = ""
     @State private var lastGuessStr3: String = ""
+    
+    @State private var textColor: Color = .black
 
     
     func clicked(key: String) {
@@ -88,12 +89,32 @@ struct ContentView: View {
             }
         }
     }
+    func checkTemp() -> Bool {
+        let rStr = String(hexCode.prefix(2))
+        let gStr = String(hexCode.dropFirst(2).prefix(2))
+        let bStr = String(hexCode.dropFirst(4).prefix(2))
+        print(rStr + gStr + bStr)
+        
+        let r = UInt8(rStr, radix: 16) ?? 0
+        let g = UInt8(gStr, radix: 16) ?? 0
+        let b = UInt8(bStr, radix: 16) ?? 0
+        print(Double(r)+Double(g)+Double(b))
+        
+        return Double(r)+Double(g)+Double(b) < 210
+        
+    }
     
     func enter() {
 //        let temp = lastGuessStr3
         if hexCode.count == 6 {
             
             bgHexCode = hexCode
+            if checkTemp() {
+                textColor = Color(.white)
+            }
+            else{
+                textColor = Color(.black)
+            }
             
             lastGuessStr1 = lastGuessStr2
             lastGuessStr2 = lastGuessStr3
@@ -120,19 +141,20 @@ struct ContentView: View {
                 Color(hex: bgHexCode)
                     .ignoresSafeArea()
                 VStack{
+                    Spacer(minLength: 50)
                     HStack {
                         RoundedRectangle(cornerRadius: 40)
                             .fill(Color(hex: hexToGuess))
                             .frame(width: 200, height:200)
                             .position(x: 120, y: 150 )
-                        LastGuessed(lastGuessStr1: $lastGuessStr1, lastGuessStr2: $lastGuessStr2, lastGuessStr3: $lastGuessStr3)
+                        LastGuessed(lastGuessStr1: $lastGuessStr1, lastGuessStr2: $lastGuessStr2, lastGuessStr3: $lastGuessStr3, textColor: $textColor)
                             .position(x: geometry.size.width/4, y: 150)
                         
                     }
-                    Spacer(minLength: 100)
-                    GuessBank(guess1: $guess1, guess2: $guess2, guess3: $guess3, guess4: $guess4, guess5: $guess5, guess6: $guess6)
+                    Spacer(minLength: 180)
+                    GuessBank(guess1: $guess1, guess2: $guess2, guess3: $guess3, guess4: $guess4, guess5: $guess5, guess6: $guess6, textColor: $textColor)
                         .position(x: geometry.size.width / 2, y: geometry.size.height/10)
-                    
+                    Spacer(minLength: 40)
                     Button(action: {enter()}) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 30)

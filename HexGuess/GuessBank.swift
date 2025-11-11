@@ -15,10 +15,13 @@ struct GuessBank: View {
     @Binding var guess5: String
     @Binding var guess6: String
     
+    @Binding var textColor: Color
+    
     var body: some View {
         HStack {
             Text("#")
                 .font(.title)
+                .foregroundStyle(textColor)
             GuessCell(letter: guess1)
             GuessCell(letter: guess2)
             GuessCell(letter: guess3)
