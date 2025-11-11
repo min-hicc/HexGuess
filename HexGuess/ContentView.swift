@@ -33,6 +33,8 @@ extension Color {
 
 struct ContentView: View {
     let hexToGuess: String
+    @Binding var win: Bool
+    
     @State private var hexCode: String = ""
     @State private var bgHexCode: String = ""
     
@@ -106,6 +108,9 @@ struct ContentView: View {
     
     func enter() {
 //        let temp = lastGuessStr3
+        if hexCode == hexToGuess {
+            win.toggle()
+        }
         if hexCode.count == 6 {
             
             bgHexCode = hexCode
@@ -173,7 +178,7 @@ struct ContentView: View {
         }
     }
 }
-
-#Preview {
-    ContentView(hexToGuess: "FF0000")
-}
+//
+//#Preview {
+//    ContentView(hexToGuess: "FF0000", win: false)
+//}
