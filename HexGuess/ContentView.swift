@@ -11,7 +11,7 @@ extension Color {
     init(hex: String) {
         let cleanedHex = hex.trimmingCharacters(in: .whitespacesAndNewlines)
         guard cleanedHex.count == 6 else {
-            self = .gray
+            self = .white
             print("Invalid hex code: \(hex)")
             return
         }
@@ -32,8 +32,9 @@ extension Color {
 }
 
 struct ContentView: View {
-    let hexToGuess: String
+    @State var hexToGuess: String
     @Binding var win: Bool
+    @Binding var hint: Int
     
     @State private var hexCode: String = ""
     @State private var bgHexCode: String = ""
@@ -134,9 +135,6 @@ struct ContentView: View {
             guess6 = ""
             
         }
-        
-        
-        
     }
     
     var body: some View {
@@ -157,20 +155,31 @@ struct ContentView: View {
                         
                     }
                     Spacer(minLength: 180)
-                    GuessBank(guess1: $guess1, guess2: $guess2, guess3: $guess3, guess4: $guess4, guess5: $guess5, guess6: $guess6, textColor: $textColor)
+                    GuessBank(guess1: $guess1, guess2: $guess2, guess3: $guess3, guess4: $guess4, guess5: $guess5, guess6: $guess6, textColor: $textColor, hint: $hint, correctGuess: $hexToGuess )
                         .position(x: geometry.size.width / 2, y: geometry.size.height/10)
                     Spacer(minLength: 40)
-                    Button(action: {enter()}) {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 30)
-                                .fill(.black)
-                            Text("enter")
+                    HStack {
+                        Button(action: {enter()}) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(.black)
+                                Text("enter")
+                            }
                         }
+                        .frame(width: 100, height: 50)
+//                        .position(x: geometry.size.width / 2, y: 0)
+                        
+                        Button(action: {hint += 1}) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(.yellow)
+                                Text("hint")
+                            }
+                        }
+                        .frame(width: 50, height: 50)
+//                        .position(x: geometry.size.width / 2, y: 0)
                     }
-                    .frame(width: 100, height: 50)
                     .position(x: geometry.size.width / 2, y: 0)
-                    
-
 
                     Keyboard(clicked: clicked)
                 }
@@ -182,3 +191,4 @@ struct ContentView: View {
 //#Preview {
 //    ContentView(hexToGuess: "FF0000", win: false)
 //}
+

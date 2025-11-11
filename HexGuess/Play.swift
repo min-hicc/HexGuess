@@ -6,7 +6,7 @@
 //
 import SwiftUI
 func buildRandom() -> String {
-    let hexList: [String] = ["1", "2", "3", "4", "5", "6", "7" , "8", "9", "A", "B", "C", "D", "E", "f"]
+    let hexList: [String] = ["1", "2", "3", "4", "5", "6", "7" , "8", "9", "A", "B", "C", "D", "E", "F"]
     let ret = hexList.randomElement()! + hexList.randomElement()! + hexList.randomElement()! + hexList.randomElement()! + hexList.randomElement()! + hexList.randomElement()!
     print(ret)
 
@@ -18,6 +18,8 @@ struct Play: View {
     @State private var isPlaying = false
     @State private var randomColor = buildRandom()
     @State private var win = false
+    
+    @State private var hint: Int = 0
 
     
     var body: some View {
@@ -45,11 +47,12 @@ struct Play: View {
         }
         if isPlaying && !win {
             ZStack{
-                ContentView(hexToGuess: randomColor, win: $win)
+                ContentView(hexToGuess: randomColor, win: $win, hint: $hint)
 
                 Button(action: {
                     isPlaying.toggle()
                     randomColor = buildRandom()
+                    hint = 0
                 }) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
@@ -73,6 +76,7 @@ struct Play: View {
                     Button("Play Again") {
                         isPlaying.toggle()  // Switch to the play screen
                         win = false
+                        hint = 0
                         randomColor = buildRandom()
                     }
                     .font(.title2)
