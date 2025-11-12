@@ -92,7 +92,8 @@ struct ContentView: View {
             }
         }
     }
-    func checkTemp() -> Bool {
+    
+    func checkTemp(hexCode: String, k: Double) -> Color {
         let rStr = String(hexCode.prefix(2))
         let gStr = String(hexCode.dropFirst(2).prefix(2))
         let bStr = String(hexCode.dropFirst(4).prefix(2))
@@ -101,9 +102,15 @@ struct ContentView: View {
         let r = UInt8(rStr, radix: 16) ?? 0
         let g = UInt8(gStr, radix: 16) ?? 0
         let b = UInt8(bStr, radix: 16) ?? 0
-        print(Double(r)+Double(g)+Double(b))
         
-        return Double(r)+Double(g)+Double(b) < 210
+        let total = Double(r)+Double(g)+Double(b)
+        print(total)
+        if total < k {
+            return .white
+        }
+        else {
+            return .black
+        }
         
     }
     
@@ -115,12 +122,7 @@ struct ContentView: View {
         if hexCode.count == 6 {
             
             bgHexCode = hexCode
-            if checkTemp() {
-                textColor = Color(.white)
-            }
-            else{
-                textColor = Color(.black)
-            }
+            textColor = checkTemp(hexCode: hexCode, k: 210)
             
             lastGuessStr1 = lastGuessStr2
             lastGuessStr2 = lastGuessStr3
@@ -135,6 +137,26 @@ struct ContentView: View {
             guess6 = ""
             
         }
+    }
+    
+    func diluteColor(ogcolor: String) -> Color {
+        let rStr = String(ogcolor.prefix(2))
+        let gStr = String(ogcolor.dropFirst(2).prefix(2))
+        let bStr = String(ogcolor.dropFirst(4).prefix(2))
+        
+        
+        
+        let r = UInt8(rStr, radix: 16) ?? 0
+        let g = UInt8(gStr, radix: 16) ?? 0
+        let b = UInt8(bStr, radix: 16) ?? 0
+        
+        
+//        print("dilutes")
+
+//        print(String(Double(r)*1.3 + Double(g)*1.3 + Double(b)*1.3))
+//        print("Wat")
+        
+        return Color(red: (Double(r)*1.3)/255, green: (Double(g)*1.3)/255, blue:  (Double(b)*1.3)/255)
     }
     
     var body: some View {
@@ -159,36 +181,34 @@ struct ContentView: View {
                         .position(x: geometry.size.width / 2, y: geometry.size.height/10)
                     Spacer(minLength: 40)
                     HStack {
-                        Button(action: {enter()}) {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 20)
-                                    .fill(.black)
-                                Text("enter")
-                            }
-                        }
-                        .frame(width: 100, height: 50)
-//                        .position(x: geometry.size.width / 2, y: 0)
-                        
                         Button(action: {hint += 1}) {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 20)
-                                    .fill(.yellow)
+                                    .fill(diluteColor(ogcolor: hexToGuess))
+//                                    .fill(.yellow)
                                 Text("hint")
+                                    .foregroundStyle(.white)
                             }
                         }
                         .frame(width: 50, height: 50)
-//                        .position(x: geometry.size.width / 2, y: 0)
+                        
+                        Button(action: {enter()}) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(.white)
+                                    .fill(Color(hex: hexToGuess))
+                                Text("enter")
+                                    .foregroundStyle(checkTemp(hexCode: hexToGuess, k: 700))
+                            }
+                        }
+                        .frame(width: 100, height: 50)
                     }
                     .position(x: geometry.size.width / 2, y: 0)
 
                     Keyboard(clicked: clicked)
+                        .foregroundStyle(Color(hex: hexToGuess))
                 }
             }
         }
     }
 }
-//
-//#Preview {
-//    ContentView(hexToGuess: "FF0000", win: false)
-//}
-

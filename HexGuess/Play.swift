@@ -11,6 +11,7 @@ func buildRandom() -> String {
     print(ret)
 
     return ret
+//    return "FFFFFF"
     
 }
 
@@ -28,17 +29,23 @@ struct Play: View {
                 Color(hex: randomColor)
                     .ignoresSafeArea()
                 VStack {
-                    Text("Welcome to Hex Guess!")
-                        .font(.title)
-                        .padding()
-                    
+//                    ZStack{
+//                        RoundedRectangle(cornerRadius: 15)
+//                            .fill(Color(.white))
+//                        Text("Welcome to Hex Guess!")
+//                            .font(.title)
+//                            .foregroundStyle(Color(hex: randomColor))
+//                    }
+//                    .frame(width: 350, height: 80)
+//                    
+
                     Button("Start Game") {
                         isPlaying.toggle()  // Switch to the game screen
                     }
                     .font(.title2)
                     .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
+                    .background(Color.white)
+                    .foregroundColor(Color(hex: randomColor))
                     .cornerRadius(10)
                     
                 }
@@ -55,12 +62,13 @@ struct Play: View {
                     hint = 0
                 }) {
                     ZStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(.white)
+                        RoundedRectangle(cornerRadius: 9)
+                            .fill(Color(hex: randomColor))
                         Text("back")
+                            .foregroundColor(.white)
                     }
                 }
-                .frame(width: 70, height: 20)
+                .frame(width: 70, height: 30)
                 .position(x: 50, y: 10)
             }
         }
@@ -73,8 +81,13 @@ struct Play: View {
                         .font(.title)
                         .padding()
                     
+                    //add a stats text
+                    // hints used: 0
+                    // tries: 0
+                    // time : 00:00
+                    
                     Button("Play Again") {
-                        isPlaying.toggle()  // Switch to the play screen
+                        isPlaying = true  // Switch to the new screen
                         win = false
                         hint = 0
                         randomColor = buildRandom()
@@ -86,7 +99,6 @@ struct Play: View {
                     .cornerRadius(10)
                     
                 }
-//                .padding()
             }
         }
     }
